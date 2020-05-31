@@ -1,0 +1,214 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{minted}
+\usepackage{hyperref}
+
+\title{Recursive Programs for Counting}
+\date{2020-05-30}
+
+
+\begin{document}
+	\pagenumbering{gobble}
+	\maketitle
+	\newpage
+	\pagenumbering{arabic}
+	\tableofcontents
+	\newpage
+	
+	\section{Explanation}
+	
+	(LaTeX)
+	When completing the Counting unit, I had just completed some coding in Python for another unit
+	(SIT384, Cyber Security Analytics). I'd completed a recursive factorial script earlier in the trimester
+	for some fun, and I had still had my terminal open. I used the script to give me factorial values, then
+	decided to quickly write up some scripts to do combination, permutation, binomials and combination repetition
+	(later shortened to just combination, permutation and combination repetition as binomials are combinations).
+	
+	\section{Repetition}
+	
+	All of the following code utilises repetition to derive the factorial values.
+	That code is provided here:
+	
+	\begin{minted}{python}
+def recursion(input):
+	if input > 1:
+		result = input * recursion(input-1)
+	else:
+		result = 1
+	return result
+	\end{minted}
+	
+	This code stops running at 999 (producing values up to and including 998) due to
+	how Python does repetition. As it is, you shouldn't really need values past 1000.
+	
+	Future versions may include hard-coded values at each 20th interval (i.e. 20,40...)
+	to speed up processing.
+	
+	\section{Factorial}
+	
+	The initial code for factorial calculation is included for posterity, as all scripts used originate from here.
+	It takes a value and checks if it's larger than 0. If larger than 0,
+	it conducts recursion and prints the result. If smaller, it requests a value that is positive.
+	
+	\begin{minted}{python}
+while True:
+	accepted = int(input("Please input a non-negative integer: "))
+	if accepted >= 0:
+		print(recursion(accepted))
+	else:
+		print("Please input a number that has no negative.")
+	\end{minted}
+	
+	\section{Combination}
+	
+	Combination is utilised when you need the number of all possible
+	results from a given selection. This is usually displayed as the following equation:
+
+	\begin{equation*}
+	C(n,k) = \frac{n!}{k!(n-k)!}
+	\end{equation*}
+	
+	For example, if you needed all the 3-letter combinations from 5 letters, the
+	equation required would be:
+	
+	\begin{align*}
+	C(5,3) & = \frac{5!}{3!(5-3)!}\\
+	& = \frac{5!}{3!2!}\\
+	& = 10
+	\end{align*}
+	
+	The Python code written below takes the values n and k, and produces
+	the result. It utilises a while statement to allow for continuous input.
+	
+	\paragraph{}
+	It works by taking the two inputs (n and k), making n-k as a separate variable,
+	obtaining the recursive values of all three then conducting the equation and printing
+	the result.
+	
+	
+	\begin{minted}{python}
+while True:
+	result = 1
+	val1 = int(input("Value one:"))
+	val2 = int(input("Value two:"))
+	if val1 >= 0:
+		val3 = val1 - val2
+		val1 = recursion(val1)
+		val2 = recursion(val2)
+		val3 = recursion(val3)
+		val4 = val1 / (val3 * val2)
+		print(val4)
+	else:
+		print("Please input a number that has no negative.")
+	\end{minted}
+	
+	The code can be compressed by writing the recursion into the equation, instead of doing it separately.
+	However, for code clarity, it has been separated.
+	
+	\section{Permutation}
+	
+	Permutation is utilised when you the number of possible results
+	where the output follows a certain order.
+	This is usually displayed as the following equation:
+
+	\begin{equation*}
+	P(n,k) = \frac{n!}{(n-k)!}
+	\end{equation*}
+	
+	For example, if you needed all the 3-letter combinations from 5 letters in alphabetical order, the
+	equation required would be:
+	
+	\begin{align*}
+	P(5,3) & = \frac{5!}{(5-3)!}\\
+	& = \frac{5!}{2!}\\
+	& = 60
+	\end{align*}
+	
+	The Python code written below takes the values n and k, and produces
+	the result. It utilises a while statement to allow for continuous input.
+	
+	\paragraph{}
+	It works by taking the two inputs (n and k), making n-k in place, then obtaining
+	the recursive values of both and dividing them, before printing the result.
+	
+	\begin{minted}{python}
+while True:
+	result = 1
+	val1 = int(input("Value one:"))
+	val2 = int(input("Value two:"))
+	if val1 >= 0:
+		val2 = val1 - val2
+		val1 = recursion(val1)
+		val2 = recursion(val2)
+		val3 = val1 / val2
+		print(val3)
+	else:
+		print("Please input a number that has no negative.")
+	\end{minted}
+	
+	The code can be compressed by writing the recursion into the equation, instead of doing it separately.
+	However, for code clarity, it has been separated.
+	
+	
+	\section{Combination Repetition}
+	
+	Combination repetition takes a set A, and tries to stuff it in as many different formats as possible.
+	For example, given a set $S=\{A,B,C,D\}$ and asked the question "How many times can you make a different 3-letter value?",
+	you can produce "AAA, AAB, AAC, AAD, ABB, ABC, ABD, ACC, ACD, ADD, BBB, BBC, BBD, BCC, BCD, BDD, CCC, CCD, CDD, DDD.", which is 15 values.
+
+	\paragraph{}
+	That description is bad. Let's just use the equation (which uses a non-standard designation).
+	
+	\begin{equation*}
+	CR(n,k) = \frac{(n+k-1)!}{k!(n-1)!}
+	\end{equation*}
+	
+	When given the same example as the rest (5 letters, 3-letter output) you get the following result:
+	
+	\begin{align*}
+	CR(5,3) & = \frac{(5+3-1)!}{3!(5-1)!}\\
+	& = \frac{7!}{3!4!} \\
+	& = 35
+	\end{align*}
+	
+	The Python code written below takes the values n and k, and produces
+	the result. It utilises a while statement to allow for continuous input.
+	
+	\paragraph{}
+	It works by taking the two inputs (n and k), making n+k-1 as a separate variable, making n-1 from n+k-1 as another variable,
+	then obtaining the recursive values of all four and dividing with the equation, before printing the result.
+	Making n-1 from n+k-1 was blind luck, as this code is originally a modification of the combination code.
+	
+	\begin{minted}{python}
+while True:
+	result = 1
+	val1 = int(input("Value one:"))
+	val2 = int(input("Value two:"))
+	if val1 >= 0:
+		val1 = val1 + val2 - 1
+		val3 = val1 - val2
+		val1 = recursion(val1)
+		val2 = recursion(val2)
+		val3 = recursion(val3)
+		val4 = val1 / (val3 * val2)
+		print(val4)
+	else:
+		print("Please input a number that has no negative.")
+	\end{minted}
+	
+	The code can be compressed by writing the recursion into the equation, instead of doing it separately.
+	However, for code clarity, it has been separated.	
+	
+	\section{Tools used to write this document}
+	\paragraph{Notepad++}
+	using the \href{https://draculatheme.com/notepad-plus-plus/}{Dracula} theme
+	with ligatures enabled. (URL: \url{https://draculatheme.com/notepad-plus-plus/})
+	\paragraph{MikTeX}
+	using PDFTex+MakeIndex+BibTeX with the amsmath, minted and hyperref packages.
+	(URL: \url{https://miktex.org/})
+	\paragraph{Internet}
+	with far too much browsing for information for my liking.
+	
+
+\end{document}
